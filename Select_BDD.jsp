@@ -76,6 +76,38 @@
 <h2>Exercice 3 : Modification du titre du film</h2>
 <p>Créer un fichier permettant de modifier le titre d'un film sur la base de son ID (ID choisi par l'utilisateur)</p>
 
+    <form action="#" method="post">
+        <label for="filmId">ID du film :</label>
+        <input type="text" id="filmId" name="filmId">
+        <label for="newTitle">Nouveau titre :</label>
+        <input type="text" id="newTitle" name="newTitle">
+        <input type="submit" value="Modifier">
+    </form>
+
+    <%
+        String filmId = request.getParameter("filmId");
+        String newTitle = request.getParameter("newTitle");
+
+        if (filmId != null && newTitle != null) {
+            conn = DriverManager.getConnection(url, user, password);
+            int idToUpdate = Integer.parseInt(filmId);
+            String updateSQL = "UPDATE Film SET titre = ? WHERE idFilm = ?";
+            PreparedStatement updateStmt = conn.prepareStatement(updateSQL);
+            updateStmt.setString(1, newTitle);
+            updateStmt.setInt(2, idToUpdate);
+
+            int rowsUpdated = updateStmt.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                out.println("<p>Modification réussie pour le film avec l'ID " + idToUpdate + ". Son nouveau titre est : "+newTitle + ".</p>");
+            } else {
+                out.println("<p>Erreur aucune modification effectuée.</p>");
+            }
+
+            updateStmt.close();
+        }
+    %>
+
 <h2>Exercice 4 : La valeur maximum</h2>
 <p>Créer un formulaire pour saisir un nouveau film dans la base de données</p>
 
